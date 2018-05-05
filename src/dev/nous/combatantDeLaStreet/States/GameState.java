@@ -9,28 +9,28 @@ import dev.nous.combatantDeLaStreet.Worlds.World1;
 
 
 public class GameState extends State{
-	private Barbare barbare;
+	private Barbare joueur1;
 	private World1 world1;
-	private Wizard wizard;
+	private Wizard joueur2;
 
 	
 	public GameState(Game game) {
 		super(game);
 		world1 = new World1();
-		barbare= new Barbare(game, 400, 200 ,3f, 90, 70, 0);
-		wizard= new Wizard(game, 400, 200 ,6f, 90, 70, 1);
+		joueur1= new Barbare(game, 400, 200 ,3f, 90, 70, 0);
+		joueur2= new Wizard(game, 400, 200 ,6f, 90, 70, 1);
 	}
 	
 	@Override
 	public void update() {
-		barbare.update();
-		wizard.update();
+		joueur1.update();
+		joueur2.update();
 	}
 
 	@Override
 	public void render(Graphics g) {
-		wizard.render(g);
-		barbare.render(g);
+		joueur1.render(g);
+		joueur2.render(g);
 		world1.render(g);
 	}
 	

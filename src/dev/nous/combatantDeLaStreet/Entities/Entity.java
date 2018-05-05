@@ -27,4 +27,9 @@ public abstract class Entity {
 	public abstract void update();
 		
 	public abstract void render(Graphics g);
+	
+	public float[] getPosition(){
+		float[] pos = {x,y};
+		return pos;
+	}
 }

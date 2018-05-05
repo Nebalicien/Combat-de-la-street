@@ -9,9 +9,10 @@ import dev.nous.combatantDeLaStreet.gfx.Assets;
 public class Wizard extends Hero{
 	private BouleDeFeu bdf;
 	public static boolean isSuperAttacking =false;
+	protected static double attackRange = 40;
 	
 	public Wizard(Game game, float x, float y, float speed, int h, int w, int owner) {
-		super(game, x,y,speed,h,w, owner);
+		super(game, x,y,speed,h,w, owner,attackRange);
 		hitbox.x = 20;
 		hitbox.y = 20;
 		hitbox.height = 70;
@@ -32,9 +33,10 @@ public class Wizard extends Hero{
 	public void render(Graphics g) {
 		g.drawImage(Assets.wizard, (int) x, (int) y,w,h, null);
 		g.setColor(Color.RED);
-		g.drawRect((int)x+hitbox.x,(int) y+hitbox.y, hitbox.width,hitbox.height);
 		if(isSuperAttacking)
 			bdf.render(g);
+		g.drawRect((int)x+attackBox.x,(int) y+attackBox.y, attackBox.width,attackBox.height);
+
 	}
 	
 	@Override

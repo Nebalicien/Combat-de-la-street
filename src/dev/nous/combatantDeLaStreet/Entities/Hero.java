@@ -1,5 +1,7 @@
 package dev.nous.combatantDeLaStreet.Entities;
 
+import java.awt.Rectangle;
+
 import dev.nous.combatantDeLaStreet.Game;
 import dev.nous.combatantDeLaStreet.Worlds.World1;
 import dev.nous.combatantDeLaStreet.blocks.Block;
@@ -9,7 +11,6 @@ public abstract class Hero extends Entity{
 	protected double vie;
 	protected String nom;
 	protected double vitesse;
-	protected int[] position;
 	protected int orientation;
 	protected double attaqueDegat;
 	protected double armor; 
@@ -18,11 +19,17 @@ public abstract class Hero extends Entity{
 	protected int owner;
 	protected boolean isJumping = false;
 	protected int superAttackCooldown = 0;
+	protected double attackRange;
+	protected Rectangle attackBox;
+;
 	
-	public Hero(Game game, float x, float y, float speed, int h, int w, int owner) {
+	
+	public Hero(Game game, float x, float y, float speed, int h, int w, int owner, double attackRange) {
 		super(x,y,speed,h,w);
 		this.game = game;
 		this.owner = owner;
+		this.attackRange = attackRange;
+		this.attackBox = new Rectangle(w, 0, (int)attackRange,h);
 	}
 	
 	protected void getInputJ1() {
@@ -46,6 +53,9 @@ public abstract class Hero extends Entity{
 		if(game.getKeyManager().right1) {
 			this.orientation = 3;
 			xMove+=speed;
+		}
+		if(game.getKeyManager().basicAttack1) {
+			basicAttack();
 		}
 		if (superAttackCooldown >= 100f) {
 			if(game.getKeyManager().superAttack1) {
@@ -77,6 +87,9 @@ public abstract class Hero extends Entity{
 		if(game.getKeyManager().right2) {
 			this.orientation = 3;
 			xMove+=speed;
+		}
+		if(game.getKeyManager().basicAttack2) {
+			basicAttack();
 		}
 		if (superAttackCooldown >= 100f) {
 			if(game.getKeyManager().superAttack2) {
@@ -127,11 +140,25 @@ public abstract class Hero extends Entity{
 
 	abstract void superAttack();
 	
-	protected void attack() {
+	protected void basicAttack() {
+		switch(orientation) {
+			case 1:
+				//vers la gauche
+				attackBox.setBounds(-(int)attackRange,0, (int)attackRange, h);
+				break;
+			case 3:
+				//vers la droite
+				attackBox.setBounds(w,0, (int)attackRange, h);
+				break;
+			default:
+				attackBox.setBounds(w,0, (int)attackRange, h);
+				break;
+		}
 		
 	}
 	
 	protected void defend() {
 		
 	}
+		
 }

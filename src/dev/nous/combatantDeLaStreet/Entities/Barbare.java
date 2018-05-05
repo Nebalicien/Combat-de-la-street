@@ -7,8 +7,9 @@ import dev.nous.combatantDeLaStreet.Game;
 import dev.nous.combatantDeLaStreet.gfx.Assets;
 
 public class Barbare extends Hero{
+	private static double attackRange = 30;
 	public Barbare(Game game, float x, float y, float speed, int h, int w, int owner) {
-		super(game, x,y,speed,h,w, owner);
+		super(game, x,y,speed,h,w, owner, attackRange);
 		hitbox.x = 20;
 		hitbox.y = 20;
 		hitbox.height = 70;
