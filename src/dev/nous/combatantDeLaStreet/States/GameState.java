@@ -4,17 +4,14 @@ import java.awt.Graphics;
 
 import dev.nous.combatantDeLaStreet.Game;
 import dev.nous.combatantDeLaStreet.Entities.Barbare;
-import dev.nous.combatantDeLaStreet.Entities.BouleDeFeu;
 import dev.nous.combatantDeLaStreet.Entities.Wizard;
 import dev.nous.combatantDeLaStreet.Worlds.World1;
-import dev.nous.combatantDeLaStreet.blocks.Block;
-import dev.nous.combatantDeLaStreet.gfx.Assets;
+
 
 public class GameState extends State{
 	private Barbare barbare;
 	private World1 world1;
 	private Wizard wizard;
-	private BouleDeFeu boom;
 
 	
 	public GameState(Game game) {

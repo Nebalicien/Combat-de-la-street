@@ -1,10 +1,6 @@
 package dev.nous.combatantDeLaStreet.Entities;
 
-import java.awt.Color;
-import java.awt.Graphics;
-
 import dev.nous.combatantDeLaStreet.Game;
-import dev.nous.combatantDeLaStreet.Launcher;
 import dev.nous.combatantDeLaStreet.Worlds.World1;
 import dev.nous.combatantDeLaStreet.blocks.Block;
 
