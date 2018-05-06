@@ -7,20 +7,22 @@ import dev.nous.combatantDeLaStreet.Worlds.World1;
 import dev.nous.combatantDeLaStreet.blocks.Block;
 
 public abstract class Hero extends Entity{
+	public static Hero[] allHeros = new Hero[2];
 	protected Game game;
-	protected double vie;
-	protected String nom;
-	protected double vitesse;
+	protected double health;
+	protected String name;
 	protected int orientation;
-	protected double attaqueDegat;
+	protected double basicDamages;
 	protected double armor; 
 	protected boolean isOnFloor;
 	protected double jumpHeight = 0;
 	protected int owner;
 	protected boolean isJumping = false;
 	protected int superAttackCooldown = 0;
+	protected int basicAttackCooldown = 0;
 	protected double attackRange;
 	protected Rectangle attackBox;
+	protected Hero ennemi;
 ;
 	
 	
@@ -30,6 +32,10 @@ public abstract class Hero extends Entity{
 		this.owner = owner;
 		this.attackRange = attackRange;
 		this.attackBox = new Rectangle(w, 0, (int)attackRange,h);
+		if(owner == 0)
+			allHeros[0] = this;  //permet de garder trace des heros sur le plateau de jeu
+		else
+			allHeros[1] = this;
 	}
 	
 	protected void getInputJ1() {
@@ -54,16 +60,16 @@ public abstract class Hero extends Entity{
 			this.orientation = 3;
 			xMove+=speed;
 		}
-		if(game.getKeyManager().basicAttack1) {
+		if(game.getKeyManager().basicAttack1 && basicAttackCooldown >=30) {
 			basicAttack();
+			basicAttackCooldown = 0;
 		}
-		if (superAttackCooldown >= 100f) {
-			if(game.getKeyManager().superAttack1) {
+		if (game.getKeyManager().superAttack1 && superAttackCooldown >= 100) {
 				superAttack();
 				superAttackCooldown = 0;
-			}
 		}
 		superAttackCooldown++;
+		basicAttackCooldown++;
 	}
 	
 	protected void getInputJ2() {
@@ -88,16 +94,18 @@ public abstract class Hero extends Entity{
 			this.orientation = 3;
 			xMove+=speed;
 		}
-		if(game.getKeyManager().basicAttack2) {
+		if(game.getKeyManager().basicAttack2 && basicAttackCooldown >=30) {
 			basicAttack();
+			basicAttackCooldown = 0;
 		}
-		if (superAttackCooldown >= 100f) {
+		if (superAttackCooldown >= 100) {
 			if(game.getKeyManager().superAttack2) {
 				superAttack();
 				superAttackCooldown = 0;
 			}
 		}
 		superAttackCooldown++;
+		basicAttackCooldown++;
 	}
 	
 	
@@ -141,21 +149,31 @@ public abstract class Hero extends Entity{
 	abstract void superAttack();
 	
 	protected void basicAttack() {
+		if(owner == 0)
+			ennemi = allHeros[1];  //on attribue ennemi ici et pas dans le constructeur pour être sur que les deux héros sont instanciés
+		else
+			ennemi = allHeros[0];
+		
 		switch(orientation) {
 			case 1:
 				//vers la gauche
-				attackBox.setBounds(-(int)attackRange,0, (int)attackRange, h);
+				attackBox.setBounds((int)x-(int)attackRange,(int)y, (int)attackRange, h);
 				break;
 			case 3:
 				//vers la droite
-				attackBox.setBounds(w,0, (int)attackRange, h);
+				attackBox.setBounds((int)x+w,(int)y, (int)attackRange, h);
 				break;
 			default:
-				attackBox.setBounds(w,0, (int)attackRange, h);
+				attackBox.setBounds((int)x+w,(int)y, (int)attackRange, h);
 				break;
 		}
-		
+		if(attackBox.intersects(new Rectangle((int)ennemi.x+ennemi.hitbox.x, (int)ennemi.y+ennemi.hitbox.y,ennemi.hitbox.width, ennemi.hitbox.height))) {  //car les hitbox ne sont pas définis par rapport à la position du héro
+			ennemi.health-=basicDamages;
+			System.out.println(ennemi.health);
+		}
 	}
+	
+	
 	
 	protected void defend() {
 		

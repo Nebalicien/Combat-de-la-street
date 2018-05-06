@@ -17,6 +17,8 @@ public class Wizard extends Hero{
 		hitbox.y = 20;
 		hitbox.height = 70;
 		hitbox.width = 30;
+		basicDamages = 8;
+		health = 100;
 	}
 
 	@Override
@@ -35,7 +37,7 @@ public class Wizard extends Hero{
 		g.setColor(Color.RED);
 		if(isSuperAttacking)
 			bdf.render(g);
-		g.drawRect((int)x+attackBox.x,(int) y+attackBox.y, attackBox.width,attackBox.height);
+		g.drawRect(attackBox.x,attackBox.y, attackBox.width,attackBox.height);		
 
 	}
 	

@@ -14,6 +14,8 @@ public class Barbare extends Hero{
 		hitbox.y = 20;
 		hitbox.height = 70;
 		hitbox.width = 30;
+		basicDamages = 20;
+		health = 300;
 	}
 
 	@Override
@@ -26,6 +28,9 @@ public class Barbare extends Hero{
 		g.drawImage(Assets.barbare, (int) x, (int) y,w,h, null);
 		g.setColor(Color.CYAN);
 		g.drawRect((int)x+hitbox.x,(int) y+hitbox.y, hitbox.width,hitbox.height);
+		g.setColor(Color.BLACK);
+		g.drawRect(attackBox.x,attackBox.y, attackBox.width,attackBox.height);		
+
 	}
 
 	@Override

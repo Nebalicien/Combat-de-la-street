@@ -8,7 +8,7 @@ public abstract class Entity {
 	protected float speed;
 	protected int h,w;
 	protected float xMove, yMove;
-	Rectangle hitbox;
+	protected Rectangle hitbox;
 	
 	public Entity(float x, float y, float speed, int h, int w) {
 		this.x = x;
@@ -27,9 +27,4 @@ public abstract class Entity {
 	public abstract void update();
 		
 	public abstract void render(Graphics g);
-	
-	public float[] getPosition(){
-		float[] pos = {x,y};
-		return pos;
-	}
 }
