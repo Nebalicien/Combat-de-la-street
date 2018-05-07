@@ -96,7 +96,7 @@ public class Game implements Runnable{
 			}
 			
 			if(timer>=1_000_000_000) {  //si 1 seconde on affiche les fps
-				System.out.println("fps : "+ frame);
+				//System.out.println("fps : "+ frame);
 				timer =0;
 				frame=0;
 			}

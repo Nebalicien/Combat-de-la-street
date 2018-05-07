@@ -23,7 +23,7 @@ public abstract class Hero extends Entity{
 	protected double attackRange;
 	protected Rectangle attackBox;
 	protected Hero ennemi;
-;
+	protected boolean basicAttacking=false;
 	
 	
 	public Hero(Game game, float x, float y, float speed, int h, int w, int owner, double attackRange) {
@@ -171,6 +171,7 @@ public abstract class Hero extends Entity{
 			ennemi.health-=basicDamages;
 			System.out.println(ennemi.health);
 		}
+		basicAttacking = true;
 	}
 	
 	
