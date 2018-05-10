@@ -32,6 +32,7 @@ public class Barbare extends Hero{
 		jumpAnimGauche = new Animation(Assets.barbareJumpLeft, 100);
 		runAnimDroite = new Animation(Assets.barbareRunRight,80);
 		runAnimGauche = new Animation(Assets.barbareRunLeft,80);
+
 		
 	}
 
@@ -43,7 +44,7 @@ public class Barbare extends Hero{
 
 	@Override
 	public void render(Graphics g) {
-		super.render(g, Assets.barbareDroite,Assets.barbareGauche, basicAttackAnimGauche,basicAttackAnimDroite,jumpAnimGauche,jumpAnimDroite,runAnimDroite, runAnimGauche);
+		super.render(g, Assets.barbareDroite,Assets.barbareGauche, basicAttackAnimGauche,basicAttackAnimDroite,jumpAnimGauche,jumpAnimDroite,runAnimDroite, runAnimGauche,  Assets.barbareCrouchLeft, Assets.barbareCrouchRight);
 		g.setColor(Color.CYAN);
 		g.drawRect((int)x+hitbox.x,(int) y+hitbox.y, hitbox.width,hitbox.height);
 		g.setColor(Color.BLACK);

@@ -4,13 +4,14 @@ import java.awt.image.BufferedImage;
 
 public class Assets {  //contient les assets du jeu = crop la spritesheet et initialise les persos
 	private static final int w = 72, h= 72;
-	public static BufferedImage barbareDroite, barbareGauche, wizard, gobelin, dragon, grass, bouleDeFeu;
+	public static BufferedImage barbareDroite, barbareGauche,barbareCrouchRight,barbareCrouchLeft, wizard, gobelin, dragon, grass, bouleDeFeu;
 	public static BufferedImage[] barbareAttackDroite = new BufferedImage[3];
 	public static BufferedImage[] barbareAttackGauche = new BufferedImage[3];
 	public static BufferedImage[] barbareJumpRight = new BufferedImage[4];
 	public static BufferedImage[] barbareJumpLeft = new BufferedImage[4];
 	public static BufferedImage[] barbareRunRight = new BufferedImage[8];
 	public static BufferedImage[] barbareRunLeft = new BufferedImage[8];
+
 	
 	
 	public static void init() {
@@ -63,5 +64,8 @@ public class Assets {  //contient les assets du jeu = crop la spritesheet et ini
 		barbareRunLeft[6] = sp.separate(w*15, h*1, w, h);
 		barbareRunLeft[7] = sp.separate(w*16, h*1, w, h);
 		
+		//CROUCH
+		barbareCrouchRight = sp.separate(w*2, 0, h, w);
+		barbareCrouchLeft = sp.separate(w*2, h*1, h, w);
 	}
 }

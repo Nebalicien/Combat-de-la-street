@@ -31,6 +31,7 @@ public abstract class Hero extends Entity{
 	protected boolean basicAttackingGauche = false;
 	protected boolean isRunningRight = false;
 	protected boolean isRunningLeft = false;
+	protected boolean isCrouching = false;
 	
 	
 	public Hero(Game game, float x, float y, float speed, int h, int w, int owner, double attackRange) {
@@ -54,10 +55,6 @@ public abstract class Hero extends Entity{
 				jump();
 			}
 		}
-		if(game.getKeyManager().down1) {
-			orientation = 0;
-			yMove+=speed;
-		}
 		if(game.getKeyManager().left1) {
 			isRunningLeft = true;
 			xMove-=speed;
@@ -67,6 +64,12 @@ public abstract class Hero extends Entity{
 			this.orientation = 3;
 			isRunningRight = true;
 			xMove+=speed;
+		}
+		if(game.getKeyManager().down1) {
+			isCrouching = true;
+			isRunningRight= false;
+			isRunningLeft= false;
+			xMove = 0;
 		}
 		if(game.getKeyManager().basicAttack1 && basicAttackCooldown >=30) {
 			basicAttack();
@@ -81,6 +84,8 @@ public abstract class Hero extends Entity{
 		
 		if(!game.getKeyManager().left1 || game.getKeyManager().up1)
 			isRunningLeft = false;
+		if(!game.getKeyManager().down1)
+			isCrouching =false;
 		
 		superAttackCooldown++;
 		basicAttackCooldown++;
@@ -95,10 +100,6 @@ public abstract class Hero extends Entity{
 				jump();
 			}
 		}
-		if(game.getKeyManager().down2) {
-			orientation = 0;
-			yMove+=speed;
-		}
 		if(game.getKeyManager().left2) {
 			isRunningLeft =true;
 			xMove-=speed;
@@ -108,6 +109,12 @@ public abstract class Hero extends Entity{
 			this.orientation = 3;
 			isRunningRight = true;
 			xMove+=speed;
+		}
+		if(game.getKeyManager().down2) {
+			isCrouching = true;
+			isRunningRight= false;
+			isRunningLeft= false;
+
 		}
 		if(game.getKeyManager().basicAttack2 && basicAttackCooldown >=30) {
 			basicAttack();
@@ -173,9 +180,10 @@ public abstract class Hero extends Entity{
 			jumpAnimDroite.tick();
 		if(isJumping && orientation == 1)
 			jumpAnimGauche.tick();
+
 	}
 	
-	public void render(Graphics g,BufferedImage stayDroite, BufferedImage stayGauche, Animation basicAttackAnimGauche,Animation basicAttackAnimDroite,Animation jumpAnimGauche,Animation jumpAnimDroite, Animation runAnimDroite, Animation runAnimGauche) {
+	public void render(Graphics g,BufferedImage stayDroite, BufferedImage stayGauche, Animation basicAttackAnimGauche,Animation basicAttackAnimDroite,Animation jumpAnimGauche,Animation jumpAnimDroite, Animation runAnimDroite, Animation runAnimGauche, BufferedImage crouchGauche, BufferedImage crouchDroite) {
 		if(isRunningRight)
 			g.drawImage(runAnimDroite.getCurrentImage(), (int)x, (int)y,w,h,null);
 		if(isRunningLeft)
@@ -190,12 +198,16 @@ public abstract class Hero extends Entity{
 		if(basicAttackingGauche) {
 			g.drawImage(basicAttackAnimGauche.getCurrentImage(), (int)x, (int)y, w, h, null);
 		}
-		if(!basicAttackingGauche && !basicAttackingDroite && orientation == 3 && !isJumping && !isRunningRight && !isRunningLeft) {
+		if(!basicAttackingGauche && !basicAttackingDroite && orientation == 3 && !isJumping && !isRunningRight && !isRunningLeft && !isCrouching) {
 			g.drawImage(stayDroite, (int) x, (int) y,w,h, null);
 		}
-		if(!basicAttackingGauche && !basicAttackingDroite && orientation == 1 && !isJumping && !isRunningRight && !isRunningLeft) {
+		if(!basicAttackingGauche && !basicAttackingDroite && orientation == 1 && !isJumping && !isRunningRight && !isRunningLeft && !isCrouching) {
 			g.drawImage(stayGauche, (int) x, (int) y,w,h, null);
 		}
+		if(isCrouching && orientation ==3)
+			g.drawImage(crouchDroite, (int) x, (int) y,w,h, null);
+		if(isCrouching && orientation ==1)
+			g.drawImage(crouchGauche, (int) x, (int) y,w,h, null);
 	}
 	
 	protected void gravity() {	
