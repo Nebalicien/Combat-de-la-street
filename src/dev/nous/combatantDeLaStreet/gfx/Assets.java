@@ -10,6 +10,7 @@ public class Assets {  //contient les assets du jeu = crop la spritesheet et ini
 	public static BufferedImage[] barbareJumpRight = new BufferedImage[4];
 	public static BufferedImage[] barbareJumpLeft = new BufferedImage[4];
 	public static BufferedImage[] barbareRunRight = new BufferedImage[8];
+	public static BufferedImage[] barbareRunLeft = new BufferedImage[8];
 	
 	
 	public static void init() {
@@ -52,5 +53,15 @@ public class Assets {  //contient les assets du jeu = crop la spritesheet et ini
 		barbareRunRight[5] = sp.separate(w*14, 0, w, h);
 		barbareRunRight[6] = sp.separate(w*15, 0, w, h);
 		barbareRunRight[7] = sp.separate(w*16, 0, w, h);
+		
+		barbareRunLeft[0] = sp.separate(w*9, h*1, w, h);
+		barbareRunLeft[1] = sp.separate(w*10, h*1, w, h);
+		barbareRunLeft[2] = sp.separate(w*11, h*1, w, h);
+		barbareRunLeft[3] = sp.separate(w*12, h*1, w, h);
+		barbareRunLeft[4] = sp.separate(w*13, h*1, w, h);
+		barbareRunLeft[5] = sp.separate(w*14, h*1, w, h);
+		barbareRunLeft[6] = sp.separate(w*15, h*1, w, h);
+		barbareRunLeft[7] = sp.separate(w*16, h*1, w, h);
+		
 	}
 }

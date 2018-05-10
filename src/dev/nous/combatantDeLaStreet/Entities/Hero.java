@@ -30,6 +30,7 @@ public abstract class Hero extends Entity{
 	protected boolean basicAttackingDroite = false;
 	protected boolean basicAttackingGauche = false;
 	protected boolean isRunningRight = false;
+	protected boolean isRunningLeft = false;
 	
 	
 	public Hero(Game game, float x, float y, float speed, int h, int w, int owner, double attackRange) {
@@ -58,6 +59,7 @@ public abstract class Hero extends Entity{
 			yMove+=speed;
 		}
 		if(game.getKeyManager().left1) {
+			isRunningLeft = true;
 			xMove-=speed;
 			orientation = 1;
 		}
@@ -74,6 +76,12 @@ public abstract class Hero extends Entity{
 				superAttack();
 				superAttackCooldown = 0;
 		}
+		if(!game.getKeyManager().right1 || game.getKeyManager().up1)
+			isRunningRight = false;
+		
+		if(!game.getKeyManager().left1 || game.getKeyManager().up1)
+			isRunningLeft = false;
+		
 		superAttackCooldown++;
 		basicAttackCooldown++;
 	}
@@ -92,11 +100,13 @@ public abstract class Hero extends Entity{
 			yMove+=speed;
 		}
 		if(game.getKeyManager().left2) {
+			isRunningLeft =true;
 			xMove-=speed;
 			orientation = 1;
 		}
 		if(game.getKeyManager().right2) {
 			this.orientation = 3;
+			isRunningRight = true;
 			xMove+=speed;
 		}
 		if(game.getKeyManager().basicAttack2 && basicAttackCooldown >=30) {
@@ -109,13 +119,19 @@ public abstract class Hero extends Entity{
 				superAttackCooldown = 0;
 			}
 		}
+		if(!game.getKeyManager().right2 || game.getKeyManager().up2)
+			isRunningRight = false;
+		
+		if(!game.getKeyManager().left2 || game.getKeyManager().up2)
+			isRunningLeft = false;
+		
 		superAttackCooldown++;
 		basicAttackCooldown++;
 	}
 	
 	
 	
-	public void update(Animation basicAttackAnimDroite, Animation basicAttackAnimGauche, Animation jumpAnimDroite, Animation jumpAnimGauche, Animation runAnimDroite) {
+	public void update(Animation basicAttackAnimDroite, Animation basicAttackAnimGauche, Animation jumpAnimDroite, Animation jumpAnimGauche, Animation runAnimDroite, Animation runAnimGauche) {
 		if(this.owner == 0)
 			getInputJ1();
 		else
@@ -123,6 +139,8 @@ public abstract class Hero extends Entity{
 		
 		if(jumpHeight>0) {
 			isJumping= true;
+			isRunningLeft = false;
+			isRunningRight = false;
 			yMove-=10;
 			jumpHeight+=yMove;
 		}else
@@ -136,7 +154,9 @@ public abstract class Hero extends Entity{
 		//ANIMATION UPDATE
 		if(isRunningRight)
 			runAnimDroite.tick();
-			
+		if(isRunningLeft)
+			runAnimGauche.tick();
+		
 		if(basicAttackingDroite) {
 			basicAttackAnimDroite.tick();
 			if(basicAttackAnimDroite.animationDone) {
@@ -153,12 +173,13 @@ public abstract class Hero extends Entity{
 			jumpAnimDroite.tick();
 		if(isJumping && orientation == 1)
 			jumpAnimGauche.tick();
-		isRunningRight = false;
 	}
 	
-	public void render(Graphics g,BufferedImage stayDroite, BufferedImage stayGauche, Animation basicAttackAnimGauche,Animation basicAttackAnimDroite,Animation jumpAnimGauche,Animation jumpAnimDroite, Animation runAnimDroite) {
+	public void render(Graphics g,BufferedImage stayDroite, BufferedImage stayGauche, Animation basicAttackAnimGauche,Animation basicAttackAnimDroite,Animation jumpAnimGauche,Animation jumpAnimDroite, Animation runAnimDroite, Animation runAnimGauche) {
 		if(isRunningRight)
-			runAnimDroite.tick();
+			g.drawImage(runAnimDroite.getCurrentImage(), (int)x, (int)y,w,h,null);
+		if(isRunningLeft)
+			g.drawImage(runAnimGauche.getCurrentImage(), (int)x, (int)y,w,h,null);
 		if(isJumping && orientation == 3 && !basicAttackingDroite && !basicAttackingGauche)
 			g.drawImage(jumpAnimDroite.getCurrentImage(), (int)x, (int)y,w,h,null);
 		if(isJumping && orientation == 1 && !basicAttackingDroite && !basicAttackingGauche) 
@@ -169,10 +190,10 @@ public abstract class Hero extends Entity{
 		if(basicAttackingGauche) {
 			g.drawImage(basicAttackAnimGauche.getCurrentImage(), (int)x, (int)y, w, h, null);
 		}
-		if(!basicAttackingGauche && !basicAttackingDroite && orientation == 3 && !isJumping) {
+		if(!basicAttackingGauche && !basicAttackingDroite && orientation == 3 && !isJumping && !isRunningRight && !isRunningLeft) {
 			g.drawImage(stayDroite, (int) x, (int) y,w,h, null);
 		}
-		if(!basicAttackingGauche && !basicAttackingDroite && orientation == 1 && !isJumping) {
+		if(!basicAttackingGauche && !basicAttackingDroite && orientation == 1 && !isJumping && !isRunningRight && !isRunningLeft) {
 			g.drawImage(stayGauche, (int) x, (int) y,w,h, null);
 		}
 	}
