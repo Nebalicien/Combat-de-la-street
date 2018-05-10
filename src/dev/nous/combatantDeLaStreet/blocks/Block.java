@@ -7,7 +7,7 @@ public class Block {
 	public static Block[] blocks = new Block[200];  //contient tous le blocks utilisés rangés par id comme ca on instancie une fois
 	public static Block grass = new GrassBlock(1);
 	
-	public static final int BLOCK_WIDTH = 64, BLOCK_HEIGHT = 64;
+	public static final int BLOCK_WIDTH = 72, BLOCK_HEIGHT = 72;
 	protected int id;
 	protected BufferedImage texture;
 	

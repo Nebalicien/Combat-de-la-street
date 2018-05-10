@@ -23,7 +23,7 @@ public class Wizard extends Hero{
 
 	@Override
 	public void update() {
-		super.update();
+		//super.update();
 		if(isSuperAttacking) {
 			bdf.update();
 		}else {

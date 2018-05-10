@@ -34,9 +34,6 @@ public class BouleDeFeu extends Entity {
 		case 3 :
 			xMove+=speed;
 			break;
-		case 0 :
-			yMove+=speed;
-			break;
 		}
 		move();
 		Wizard.isSuperAttacking = checkObstacle();

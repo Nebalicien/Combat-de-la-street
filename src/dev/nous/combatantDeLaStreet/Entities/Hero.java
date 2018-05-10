@@ -1,10 +1,14 @@
 package dev.nous.combatantDeLaStreet.Entities;
 
+import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
 import dev.nous.combatantDeLaStreet.Game;
 import dev.nous.combatantDeLaStreet.Worlds.World1;
 import dev.nous.combatantDeLaStreet.blocks.Block;
+import dev.nous.combatantDeLaStreet.gfx.Animation;
+import dev.nous.combatantDeLaStreet.gfx.Assets;
 
 public abstract class Hero extends Entity{
 	public static Hero[] allHeros = new Hero[2];
@@ -23,7 +27,9 @@ public abstract class Hero extends Entity{
 	protected double attackRange;
 	protected Rectangle attackBox;
 	protected Hero ennemi;
-	protected boolean basicAttacking=false;
+	protected boolean basicAttackingDroite = false;
+	protected boolean basicAttackingGauche = false;
+	protected boolean isRunningRight = false;
 	
 	
 	public Hero(Game game, float x, float y, float speed, int h, int w, int owner, double attackRange) {
@@ -43,7 +49,6 @@ public abstract class Hero extends Entity{
 		yMove=0;
 		
 		if(game.getKeyManager().up1) {
-			orientation = 2;
 			if(isOnFloor) {
 				jump();
 			}
@@ -58,6 +63,7 @@ public abstract class Hero extends Entity{
 		}
 		if(game.getKeyManager().right1) {
 			this.orientation = 3;
+			isRunningRight = true;
 			xMove+=speed;
 		}
 		if(game.getKeyManager().basicAttack1 && basicAttackCooldown >=30) {
@@ -77,7 +83,6 @@ public abstract class Hero extends Entity{
 		yMove=0;
 		
 		if(game.getKeyManager().up2) {
-			orientation = 2;
 			if(isOnFloor) {
 				jump();
 			}
@@ -110,21 +115,66 @@ public abstract class Hero extends Entity{
 	
 	
 	
-	public void update() {
+	public void update(Animation basicAttackAnimDroite, Animation basicAttackAnimGauche, Animation jumpAnimDroite, Animation jumpAnimGauche, Animation runAnimDroite) {
 		if(this.owner == 0)
 			getInputJ1();
 		else
 			getInputJ2();
 		
-		if(isJumping && jumpHeight>0) {
+		if(jumpHeight>0) {
+			isJumping= true;
 			yMove-=10;
 			jumpHeight+=yMove;
-		}
+		}else
+			isJumping = false;
 
 		if(!isOnFloor)
 			gravity();
 		move();
 		checkFloor();
+		
+		//ANIMATION UPDATE
+		if(isRunningRight)
+			runAnimDroite.tick();
+			
+		if(basicAttackingDroite) {
+			basicAttackAnimDroite.tick();
+			if(basicAttackAnimDroite.animationDone) {
+				basicAttackingDroite = false;
+			}
+		}
+		if(basicAttackingGauche) {
+			basicAttackAnimGauche.tick();
+			if(basicAttackAnimGauche.animationDone) {
+				basicAttackingGauche = false;
+			}
+		}
+		if(isJumping && orientation == 3)
+			jumpAnimDroite.tick();
+		if(isJumping && orientation == 1)
+			jumpAnimGauche.tick();
+		isRunningRight = false;
+	}
+	
+	public void render(Graphics g,BufferedImage stayDroite, BufferedImage stayGauche, Animation basicAttackAnimGauche,Animation basicAttackAnimDroite,Animation jumpAnimGauche,Animation jumpAnimDroite, Animation runAnimDroite) {
+		if(isRunningRight)
+			runAnimDroite.tick();
+		if(isJumping && orientation == 3 && !basicAttackingDroite && !basicAttackingGauche)
+			g.drawImage(jumpAnimDroite.getCurrentImage(), (int)x, (int)y,w,h,null);
+		if(isJumping && orientation == 1 && !basicAttackingDroite && !basicAttackingGauche) 
+			g.drawImage(jumpAnimGauche.getCurrentImage(), (int)x, (int)y,w,h,null);
+		if(basicAttackingDroite) { 
+			g.drawImage(basicAttackAnimDroite.getCurrentImage(), (int)x, (int)y, w, h, null);
+		}
+		if(basicAttackingGauche) {
+			g.drawImage(basicAttackAnimGauche.getCurrentImage(), (int)x, (int)y, w, h, null);
+		}
+		if(!basicAttackingGauche && !basicAttackingDroite && orientation == 3 && !isJumping) {
+			g.drawImage(stayDroite, (int) x, (int) y,w,h, null);
+		}
+		if(!basicAttackingGauche && !basicAttackingDroite && orientation == 1 && !isJumping) {
+			g.drawImage(stayGauche, (int) x, (int) y,w,h, null);
+		}
 	}
 	
 	protected void gravity() {	
@@ -157,21 +207,24 @@ public abstract class Hero extends Entity{
 		switch(orientation) {
 			case 1:
 				//vers la gauche
-				attackBox.setBounds((int)x-(int)attackRange,(int)y, (int)attackRange, h);
+				attackBox.setBounds((int)x+hitbox.x-(int)attackRange,(int)y+hitbox.y, (int)attackRange, hitbox.height);
+				basicAttackingGauche = true;
 				break;
 			case 3:
 				//vers la droite
-				attackBox.setBounds((int)x+w,(int)y, (int)attackRange, h);
+				attackBox.setBounds((int)x+hitbox.x+hitbox.width,(int)y+hitbox.y, (int)attackRange, hitbox.height);
+				basicAttackingDroite = true;
 				break;
 			default:
 				attackBox.setBounds((int)x+w,(int)y, (int)attackRange, h);
+				basicAttackingDroite = true;
 				break;
 		}
 		if(attackBox.intersects(new Rectangle((int)ennemi.x+ennemi.hitbox.x, (int)ennemi.y+ennemi.hitbox.y,ennemi.hitbox.width, ennemi.hitbox.height))) {  //car les hitbox ne sont pas définis par rapport à la position du héro
 			ennemi.health-=basicDamages;
 			System.out.println(ennemi.health);
 		}
-		basicAttacking = true;
+	
 	}
 	
 	

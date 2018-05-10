@@ -8,38 +8,43 @@ import dev.nous.combatantDeLaStreet.gfx.Animation;
 import dev.nous.combatantDeLaStreet.gfx.Assets;
 
 public class Barbare extends Hero{
-	private Animation basicAttackAnim;
-	private static double attackRange = 30;
+	private Animation basicAttackAnimDroite;
+	private Animation basicAttackAnimGauche;
+	private Animation jumpAnimDroite;
+	private Animation jumpAnimGauche;
+	private Animation runAnimDroite;
+	private static double attackRange = 60;
 	public Barbare(Game game, float x, float y, float speed, int h, int w, int owner) {
 		super(game, x,y,speed,h,w, owner, attackRange);
-		hitbox.x = 20;
-		hitbox.y = 20;
+		hitbox.x = 55;
+		hitbox.y = 60;
 		hitbox.height = 70;
 		hitbox.width = 30;
 		basicDamages = 20;
 		health = 300;
 		
 		//ANIM
-		basicAttackAnim = new Animation(Assets.barbareAttack,150);
+		basicAttackAnimDroite = new Animation(Assets.barbareAttackDroite,90);
+		basicAttackAnimGauche = new Animation(Assets.barbareAttackGauche,90);
+		jumpAnimDroite = new Animation(Assets.barbareJumpRight, 100);
+		jumpAnimGauche = new Animation(Assets.barbareJumpLeft, 100);
+		runAnimDroite = new Animation(Assets.barbareRunRight,200);
+		
 	}
 
 	@Override
 	public void update() {
-		super.update();
-		if(basicAttacking)
-			basicAttackAnim.tick();
+		super.update(basicAttackAnimDroite, basicAttackAnimGauche, jumpAnimDroite, jumpAnimGauche, runAnimDroite);
+		
 	}
 
 	@Override
 	public void render(Graphics g) {
-		g.drawImage(Assets.barbare, (int) x, (int) y,w,h, null);
+		super.render(g, Assets.barbareDroite,Assets.barbareGauche, basicAttackAnimGauche,basicAttackAnimDroite,jumpAnimGauche,jumpAnimDroite,runAnimDroite);
 		g.setColor(Color.CYAN);
 		g.drawRect((int)x+hitbox.x,(int) y+hitbox.y, hitbox.width,hitbox.height);
 		g.setColor(Color.BLACK);
 		g.drawRect(attackBox.x,attackBox.y, attackBox.width,attackBox.height);	
-		if(basicAttacking)
-			g.drawImage(basicAttackAnim.getCurrentImage(), (int)x, (int)y, w, h, null);
-
 	}
 
 	@Override

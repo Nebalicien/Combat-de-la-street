@@ -88,8 +88,8 @@ public class Game implements Runnable{
 			lastTime = now;
 			
 			if(delta>=1) { // si temps ecoulé >= temps de la frame on render 
-				update();
 				render();
+				update();
 				
 				delta=0;
 				frame++;
