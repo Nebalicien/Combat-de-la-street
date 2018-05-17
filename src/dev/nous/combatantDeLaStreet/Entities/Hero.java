@@ -44,6 +44,7 @@ public abstract class Hero extends Entity{
 			allHeros[0] = this;  //permet de garder trace des heros sur le plateau de jeu
 		else
 			allHeros[1] = this;
+		this.orientation = 1;
 	}
 	
 	protected void getInputJ1() {
@@ -114,8 +115,9 @@ public abstract class Hero extends Entity{
 			isCrouching = true;
 			isRunningRight= false;
 			isRunningLeft= false;
-
+			xMove =0;
 		}
+
 		if(game.getKeyManager().basicAttack2 && basicAttackCooldown >=30) {
 			basicAttack();
 			basicAttackCooldown = 0;
@@ -131,6 +133,8 @@ public abstract class Hero extends Entity{
 		
 		if(!game.getKeyManager().left2 || game.getKeyManager().up2)
 			isRunningLeft = false;
+		if(!game.getKeyManager().down2)
+			isCrouching =false;
 		
 		superAttackCooldown++;
 		basicAttackCooldown++;
@@ -180,10 +184,9 @@ public abstract class Hero extends Entity{
 			jumpAnimDroite.tick();
 		if(isJumping && orientation == 1)
 			jumpAnimGauche.tick();
-
 	}
 	
-	public void render(Graphics g,BufferedImage stayDroite, BufferedImage stayGauche, Animation basicAttackAnimGauche,Animation basicAttackAnimDroite,Animation jumpAnimGauche,Animation jumpAnimDroite, Animation runAnimDroite, Animation runAnimGauche, BufferedImage crouchGauche, BufferedImage crouchDroite) {
+	public void render(Graphics g,BufferedImage stayDroite, BufferedImage stayGauche, Animation basicAttackAnimGauche,Animation basicAttackAnimDroite,Animation jumpAnimGauche,Animation jumpAnimDroite, Animation runAnimDroite, Animation runAnimGauche,BufferedImage crouchGauche, BufferedImage crouchDroite) {
 		if(isRunningRight)
 			g.drawImage(runAnimDroite.getCurrentImage(), (int)x, (int)y,w,h,null);
 		if(isRunningLeft)
@@ -198,7 +201,7 @@ public abstract class Hero extends Entity{
 		if(basicAttackingGauche) {
 			g.drawImage(basicAttackAnimGauche.getCurrentImage(), (int)x, (int)y, w, h, null);
 		}
-		if(!basicAttackingGauche && !basicAttackingDroite && orientation == 3 && !isJumping && !isRunningRight && !isRunningLeft && !isCrouching) {
+		if(!basicAttackingGauche && !basicAttackingDroite && orientation == 3 && !isJumping && !isRunningRight && !isRunningLeft &&!isCrouching) {
 			g.drawImage(stayDroite, (int) x, (int) y,w,h, null);
 		}
 		if(!basicAttackingGauche && !basicAttackingDroite && orientation == 1 && !isJumping && !isRunningRight && !isRunningLeft && !isCrouching) {

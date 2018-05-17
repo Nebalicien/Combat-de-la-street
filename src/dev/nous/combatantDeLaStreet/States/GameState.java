@@ -18,7 +18,7 @@ public class GameState extends State{
 		super(game);
 		world1 = new World1();
 		joueur1= new Barbare(game, 400, 200 ,3f, 180, 140, 0);
-		joueur2= new Wizard(game, 400, 200 ,6f, 90, 70, 1);
+		joueur2= new Wizard(game, 400, 200 ,6f, 180, 140, 1);
 	}
 	
 	@Override
